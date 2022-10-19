@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
-import Loading from './components/Loading';
-import HUD from './components/Display';
-
-import './App.css';
+import Header from './components/navigation/Header';
+import Home from './components/Home';
+import Display from './components/Display';
 
 //EACH COLLECTION SHOULD HAVE:
 interface ICollection {
@@ -17,10 +16,14 @@ type ItemsArray = {
 };
 
 type DataArray = {
-	title: string;
+	center?: string;
 	date_created?: string;
+	description?: string;
 	keywords?: string[];
+	location?: string;
+	media_type?: string;
 	nasa_id?: string;
+	title: string;
 	secondary_creator?: string;
 };
 
@@ -31,47 +34,66 @@ type LinkArray = {
 };
 
 function App() {
+	//TO DO: Convert related state into a useReducer
 	const [searchInput, setSearchInput] = useState<string>('');
-	//TO DO: make a custom type for the collection
+	const [center, setCenter] = useState<string>('');
+
 	const [collection, setCollection] = useState<ICollection>();
+
 	const [loading, setLoading] = useState<boolean>(true);
 
+	const [activeItem, setActiveItem] = useState<number>(0);
+
+	// TO DO: Error handle for no items in collection, Error handle for bad query / no search results
 	async function Search() {
-		const returnedImage = await fetch(
-			`https://images-api.nasa.gov/search?q=${searchInput}&center=JPL&media_type=image&year_start=2010`
+		await fetch(
+			// `https://images-api.nasa.gov/album/${searchInput}`
+			`https://images-api.nasa.gov/search?q=${searchInput}&center=GSFC&media_type=image&year_start=2010`
 		)
 			.then((response) => response.json())
 			.then((data) => {
-				//set equal to the array of items
 				setCollection(data.collection);
 				console.log(data.collection);
-				console.log('LINK HERE: ' + collection?.items[0].links[0].href);
 			});
+		setActiveItem(0);
 		setLoading(false);
 	}
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const itemsLength: number = collection?.items.length!;
+
+	const HandleImageChange = (num: number) => {
+		setActiveItem((current) => current + num);
+	};
+
+	const HandleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchInput(e.target.value);
 	};
 
+	const HandleNasaCenterChange = (str: string) => {
+		setCenter(str);
+	};
+
 	return (
-		<div className="App">
-			<header className="py-4 bg-stone-800 flex w-full justify-center items-center">
+		<div className="min-h-[100vh] bg-neutral-800 pb-[10%]">
+			{/* <Header Search={Search} /> */}
+			{/* TO DO: Convert Header element into a component that passes input state to app, then app runs a search using that state
+						Could be done by passing state up, then onClick / Enter tell parent to run Search on searchInput */}
+			<header className="flex w-full items-center justify-center bg-neutral-800 py-6 shadow-lg shadow-black">
 				<input
 					type="text"
 					id="search"
 					name="search"
 					placeholder="Search for NASA image"
-					className="px-4 rounded-md text-black rounded-r-none h-8"
+					className="h-8 rounded-md rounded-r-none px-4 text-black"
 					onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
 						if (e.key === 'Enter' && searchInput?.length > 0) {
 							Search();
 						}
 					}}
-					onChange={handleChange}
+					onChange={HandleSearchChange}
 				/>
 				<button
-					className="px-4 bg-black h-8 rounded-lg rounded-l-none flex justify-center items-center  text-white"
+					className="flex h-8 items-center justify-center rounded-lg rounded-l-none bg-black px-4  text-white"
 					onClick={() => {
 						if (searchInput?.length > 0) {
 							Search();
@@ -82,9 +104,22 @@ function App() {
 				</button>
 			</header>
 			{loading ? (
-				<Loading />
+				<Home />
 			) : (
-				<HUD image={collection?.items[0].links[0].href} />
+				<>
+					<Display
+						itemsLength={itemsLength}
+						activeItem={activeItem}
+						HandleImageChange={HandleImageChange}
+						image={collection?.items[activeItem].links[0]?.href}
+						title={collection?.items[activeItem].data[0].title}
+						date={collection?.items[activeItem].data[0].date_created}
+						center={collection?.items[activeItem].data[0].center}
+						nasa_id={collection?.items[activeItem].data[0].nasa_id}
+						description={collection?.items[activeItem].data[0].description}
+						keywords={collection?.items[activeItem].data[0].keywords}
+					/>
+				</>
 			)}
 		</div>
 	);

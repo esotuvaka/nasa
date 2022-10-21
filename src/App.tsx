@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Header from './components/navigation/Header';
 import Home from './components/Home';
 import Display from './components/Display';
+import Loading from './components/Loading';
 
 //EACH COLLECTION SHOULD HAVE:
 interface ICollection {
@@ -34,7 +35,7 @@ type LinkArray = {
 };
 
 function App() {
-	//TO DO: Convert related state into a useReducer
+	//TO DO: Convert related search query state into a useReducer
 	const [searchInput, setSearchInput] = useState<string>('');
 	const [center, setCenter] = useState<string>('');
 
@@ -44,82 +45,56 @@ function App() {
 
 	const [activeItem, setActiveItem] = useState<number>(0);
 
-	// TO DO: Error handle for no items in collection, Error handle for bad query / no search results
-	async function Search() {
-		await fetch(
-			// `https://images-api.nasa.gov/album/${searchInput}`
-			`https://images-api.nasa.gov/search?q=${searchInput}&center=GSFC&media_type=image&year_start=2010`
-		)
-			.then((response) => response.json())
-			.then((data) => {
-				setCollection(data.collection);
-				console.log(data.collection);
-			});
-		setActiveItem(0);
-		setLoading(false);
-	}
+	useEffect(() => {
+		//search NASA API automatically using debounce from Header component
+		async function fetchData() {
+			try {
+				setLoading(true);
+
+				const data = await fetch(
+					`https://images-api.nasa.gov/search?q=${searchInput}&center=GSFC&media_type=image&year_start=2010`
+				).then((res) => res.json());
+				if (data.collection.items.length !== 0) {
+					setCollection(data.collection);
+					setActiveItem(0);
+					setLoading(false);
+					console.log(data.collection);
+				} else {
+				}
+			} catch (error) {
+				console.error(error);
+			}
+		}
+
+		if (searchInput) fetchData();
+	}, [searchInput]);
 
 	const itemsLength: number = collection?.items.length!;
 
-	const HandleImageChange = (num: number) => {
+	const handleImageChange = (num: number) => {
 		setActiveItem((current) => current + num);
-	};
-
-	const HandleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setSearchInput(e.target.value);
-	};
-
-	const HandleNasaCenterChange = (str: string) => {
-		setCenter(str);
 	};
 
 	return (
 		<div className="min-h-[100vh] bg-neutral-800 pb-[10%]">
-			{/* <Header Search={Search} /> */}
-			{/* TO DO: Convert Header element into a component that passes input state to app, then app runs a search using that state
-						Could be done by passing state up, then onClick / Enter tell parent to run Search on searchInput */}
-			<header className="flex w-full items-center justify-center bg-neutral-800 py-6 shadow-lg shadow-black">
-				<input
-					type="text"
-					id="search"
-					name="search"
-					placeholder="Search for NASA image"
-					className="h-8 rounded-md rounded-r-none px-4 text-black"
-					onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
-						if (e.key === 'Enter' && searchInput?.length > 0) {
-							Search();
-						}
-					}}
-					onChange={HandleSearchChange}
-				/>
-				<button
-					className="flex h-8 items-center justify-center rounded-lg rounded-l-none bg-black px-4  text-white"
-					onClick={() => {
-						if (searchInput?.length > 0) {
-							Search();
-						}
-					}}
-				>
-					Search
-				</button>
-			</header>
+			<Header changeSearch={(data) => setSearchInput(data)} />
+
+			{/* TO DO: Combine Loading component with display and pass in loading state; Reintroduce Home component afterwards */}
 			{loading ? (
-				<Home />
+				<Loading />
 			) : (
-				<>
-					<Display
-						itemsLength={itemsLength}
-						activeItem={activeItem}
-						HandleImageChange={HandleImageChange}
-						image={collection?.items[activeItem].links[0]?.href}
-						title={collection?.items[activeItem].data[0].title}
-						date={collection?.items[activeItem].data[0].date_created}
-						center={collection?.items[activeItem].data[0].center}
-						nasa_id={collection?.items[activeItem].data[0].nasa_id}
-						description={collection?.items[activeItem].data[0].description}
-						keywords={collection?.items[activeItem].data[0].keywords}
-					/>
-				</>
+				<Display
+					itemsLength={itemsLength}
+					activeItem={activeItem}
+					handleImageChange={handleImageChange}
+					image={collection?.items[activeItem].links[0]?.href}
+					title={collection?.items[activeItem].data[0].title}
+					date={collection?.items[activeItem].data[0].date_created}
+					center={collection?.items[activeItem].data[0].center}
+					nasa_id={collection?.items[activeItem].data[0].nasa_id}
+					description={collection?.items[activeItem].data[0].description}
+					keywords={collection?.items[activeItem].data[0].keywords}
+				/>
 			)}
 		</div>
 	);

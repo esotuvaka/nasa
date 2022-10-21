@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface IDisplay {
-	HandleImageChange: (num: number) => void;
+	handleImageChange: (num: number) => void;
 	itemsLength: number;
 	activeItem: number;
 
@@ -15,7 +15,7 @@ interface IDisplay {
 }
 
 const Collection = ({
-	HandleImageChange,
+	handleImageChange,
 	itemsLength,
 
 	activeItem,
@@ -38,9 +38,13 @@ const Collection = ({
 			<div className="mx-auto my-12 flex w-4/5 items-center justify-center">
 				<button
 					onClick={() => {
-						if (activeItem > 0) HandleImageChange(-1);
+						if (activeItem > 0) handleImageChange(-1);
 					}}
-					className="mx-1 flex h-8 w-8 items-center justify-center bg-black text-2xl text-white"
+					className={
+						activeItem === 0
+							? `mx-1 flex h-8 w-8 items-center justify-center bg-neutral-900 text-2xl text-white`
+							: `mx-1 flex h-8 w-8 items-center justify-center bg-black text-2xl text-white`
+					}
 				>
 					-
 				</button>
@@ -49,9 +53,13 @@ const Collection = ({
 				</p>
 				<button
 					onClick={() => {
-						if (activeItem < itemsLength - 1) HandleImageChange(1);
+						if (activeItem < itemsLength - 1) handleImageChange(1);
 					}}
-					className="mx-1 flex h-8 w-8 items-center justify-center bg-black text-2xl text-white"
+					className={
+						activeItem === itemsLength - 1
+							? `mx-1 flex h-8 w-8 items-center justify-center bg-neutral-900 text-2xl text-white`
+							: `mx-1 flex h-8 w-8 items-center justify-center bg-black text-2xl text-white`
+					}
 				>
 					+
 				</button>
@@ -65,18 +73,20 @@ const Collection = ({
 					<h2 className="mt-2">{date}</h2>
 					<h3 className="mb-4 text-sm">{nasa_id}</h3>
 					<h4 className="mb-4">Image from {center} center</h4>
-					{React.Children.toArray(keywords?.slice(0, 3)).map((keyword) => (
+					{React.Children.toArray(keywords?.slice(1, 4)).map((keyword) => (
 						<>
 							{keyword ? (
 								<div className="my-1">
-									<p className="bg-neutral-900 px-2 py-1">{keyword}</p>
+									<p className="w-min max-w-[32vw] whitespace-pre bg-neutral-900 px-2 py-1">
+										{keyword}
+									</p>
 								</div>
 							) : (
 								<></>
 							)}
 						</>
 					))}
-					<p className="text-sm text-white">{descriptionShortened}</p>
+					<p className="mt-4 text-sm text-white">{descriptionShortened}</p>
 				</div>
 				<img
 					src={image}

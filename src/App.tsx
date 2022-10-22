@@ -34,13 +34,20 @@ type LinkArray = {
 	render: string;
 };
 
+type YearObject = {
+	start: number;
+	end: number;
+};
+
 function App() {
-	//TO DO: Convert related search query state into a useReducer
+	// TO DO: Convert related search query state into a useReducer. searchInput, center, and years are all used in the search query
+
 	const [searchInput, setSearchInput] = useState<string>('');
-	const [center, setCenter] = useState<string>('');
+	// const [center, setCenter] = useState<string>('');
+	const [timeStart, setTimeStart] = useState<number>(1900);
+	const [timeEnd, setTimeEnd] = useState<number>(2050);
 
 	const [collection, setCollection] = useState<ICollection>();
-
 	const [loading, setLoading] = useState<boolean>(true);
 
 	const [activeItem, setActiveItem] = useState<number>(0);
@@ -52,14 +59,13 @@ function App() {
 				setLoading(true);
 
 				const data = await fetch(
-					`https://images-api.nasa.gov/search?q=${searchInput}&center=GSFC&media_type=image&year_start=2010`
+					`https://images-api.nasa.gov/search?q=${searchInput}&center=GSFC&media_type=image&year_start=${timeStart}&year_end=${timeEnd}`
 				).then((res) => res.json());
 				if (data.collection.items.length !== 0) {
 					setCollection(data.collection);
 					setActiveItem(0);
 					setLoading(false);
 					console.log(data.collection);
-				} else {
 				}
 			} catch (error) {
 				console.error(error);
@@ -71,22 +77,29 @@ function App() {
 
 	const itemsLength: number = collection?.items.length!;
 
-	const handleImageChange = (num: number) => {
+	const handleItemChange = (num: number) => {
 		setActiveItem((current) => current + num);
 	};
 
+	const handleTimeChange = (start: number, end: number) => {
+		setTimeStart(start);
+		setTimeEnd(end);
+	};
+
 	return (
-		<div className="min-h-[100vh] bg-neutral-800 pb-[10%]">
+		<div className="min-h-[100vh] overflow-x-hidden bg-black">
 			<Header changeSearch={(data) => setSearchInput(data)} />
 
-			{/* TO DO: Combine Loading component with display and pass in loading state; Reintroduce Home component afterwards */}
-			{loading ? (
-				<Loading />
+			{searchInput === '' ? (
+				<Home handleTimeChange={handleTimeChange} />
 			) : (
+				// TO DO: Try to refactor Display component. Currently is changing state in the child then passing up to the parent via handleItemChange.
+				//  		 Parent uses that state to set the activeItem then passes item data down based on that activeItem
 				<Display
 					itemsLength={itemsLength}
 					activeItem={activeItem}
-					handleImageChange={handleImageChange}
+					handleItemChange={handleItemChange}
+					loading={loading}
 					image={collection?.items[activeItem].links[0]?.href}
 					title={collection?.items[activeItem].data[0].title}
 					date={collection?.items[activeItem].data[0].date_created}

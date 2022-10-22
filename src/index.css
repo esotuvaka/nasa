@@ -1,3 +1,124 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.nasa-center-container {
+	@apply grid place-items-center text-center text-lg;
+}
+
+.nasa-center-button {
+	@apply flex h-8 w-[58px] items-center justify-center rounded-md bg-neutral-200 px-2 text-neutral-400;
+}
+
+.planets-container {
+	width: 150px;
+	height: 150px;
+	border-radius: 50%;
+
+	transform: scaleX(5);
+}
+
+.earth {
+	width: 150px;
+	height: 150px;
+	border-radius: 50%;
+	background-color: blue;
+	transform: scaleX(0.2);
+	position: absolute;
+	box-shadow: 0 0 20px turquoise, 0 0 15px blue;
+}
+
+#earth-image {
+	width: 240px;
+	transform: scale(1.15);
+}
+
+.planet {
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+
+	transform: scaleX(0.2);
+}
+
+#moon {
+	background-color: white;
+}
+
+#earth {
+	background-color: green;
+}
+
+#earth-container {
+	left: 42.5px;
+	top: 100px;
+}
+
+.planet-z-index {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}
+
+#moon-index {
+	animation: hideMoon 12s infinite;
+}
+
+.route {
+	width: 100%;
+	height: 100%;
+	animation: rotate 12s infinite linear;
+	position: absolute;
+}
+
+.planet-container {
+	width: 60px;
+	height: 60px;
+	position: absolute;
+	animation: correct 12s infinite linear;
+}
+
+.animate-input {
+	animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+	50% {
+		opacity: 0.85;
+	}
+}
+
+@keyframes rotate {
+	0% {
+		transform: rotateZ(360deg);
+	}
+	100% {
+		transform: rotateZ(0deg);
+	}
+}
+
+@keyframes correct {
+	0% {
+		transform: rotateZ(0deg);
+	}
+	100% {
+		transform: rotateZ(360deg);
+	}
+}
+
+@keyframes hideMoon {
+	0% {
+		z-index: 999;
+		transform: scale(1.1);
+	}
+	25% {
+		z-index: -999;
+		transform: scale(0.9);
+	}
+	75% {
+	}
+	100% {
+		z-index: 999;
+		transform: scale(1.1);
+	}
+}

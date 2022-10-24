@@ -46,12 +46,15 @@ const Display: FC<IDisplay> = ({
 			) : (
 				<>
 					<div className="mx-auto mb-8 flex h-16 w-4/5 flex-row justify-between">
-						<div className="flex h-16 flex-row justify-start">
+						<a
+							className="flex h-16 flex-row justify-start hover:cursor-pointer"
+							href="/"
+						>
 							<img src={Nasa} alt="NASA logo" className="" />
 							<h1 className="-mt-1 ml-4 text-7xl text-neutral-200">
 								API Explorer
 							</h1>
-						</div>
+						</a>
 						<div className="flex h-16 items-end">
 							<button
 								onClick={() => {
@@ -83,6 +86,9 @@ const Display: FC<IDisplay> = ({
 						</div>
 					</div>
 					<div className="relative mx-auto grid w-4/5 grid-cols-5 gap-4 bg-black pb-20">
+						<div className="col-span-3 mx-auto">
+							<img src={image} id="mid-3-cols" className=" " alt="/" />
+						</div>
 						<div
 							id="left-col"
 							className="bg-neutral-black col-span-2 text-left text-white"
@@ -112,12 +118,6 @@ const Display: FC<IDisplay> = ({
 							</div>
 							<p className="mt-4 text-sm text-white">{descriptionShortened}</p>
 						</div>
-						<img
-							src={image}
-							id="mid-3-cols"
-							className={`col-span-3 mx-auto`}
-							alt="/"
-						/>
 					</div>
 				</>
 			)}

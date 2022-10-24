@@ -35,17 +35,17 @@ type LinkArray = {
 };
 
 type YearObject = {
-	start: number;
-	end: number;
+	start: string;
+	end: string;
 };
 
 function App() {
 	// TO DO: Convert related search query state into a useReducer. searchInput, center, and years are all used in the search query
 
 	const [searchInput, setSearchInput] = useState<string>('');
-	// const [center, setCenter] = useState<string>('');
-	const [timeStart, setTimeStart] = useState<number>(1900);
-	const [timeEnd, setTimeEnd] = useState<number>(2050);
+	const [center, setCenter] = useState<string>('GSFC');
+	const [start, setStart] = useState<string>('1958');
+	const [end, setEnd] = useState<string>('2023');
 
 	const [collection, setCollection] = useState<ICollection>();
 	const [loading, setLoading] = useState<boolean>(true);
@@ -59,7 +59,7 @@ function App() {
 				setLoading(true);
 
 				const data = await fetch(
-					`https://images-api.nasa.gov/search?q=${searchInput}&center=GSFC&media_type=image&year_start=${timeStart}&year_end=${timeEnd}`
+					`https://images-api.nasa.gov/search?q=${searchInput}&center=${center}&media_type=image&year_start=${start}&year_end=${end}`
 				).then((res) => res.json());
 				if (data.collection.items.length !== 0) {
 					setCollection(data.collection);
@@ -81,9 +81,16 @@ function App() {
 		setActiveItem((current) => current + num);
 	};
 
-	const handleTimeChange = (start: number, end: number) => {
-		setTimeStart(start);
-		setTimeEnd(end);
+	const handleStartChange = (yearStart: string) => {
+		setStart(yearStart);
+	};
+
+	const handleEndChange = (yearEnd: string) => {
+		setEnd(yearEnd);
+	};
+
+	const handleCenterChange = (center: string) => {
+		setCenter(center);
 	};
 
 	return (
@@ -91,7 +98,11 @@ function App() {
 			<Header changeSearch={(data) => setSearchInput(data)} />
 
 			{searchInput === '' ? (
-				<Home handleTimeChange={handleTimeChange} />
+				<Home
+					handleStartChange={handleStartChange}
+					handleEndChange={handleEndChange}
+					handleCenterChange={handleCenterChange}
+				/>
 			) : (
 				// TO DO: Try to refactor Display component. Currently is changing state in the child then passing up to the parent via handleItemChange.
 				//  		 Parent uses that state to set the activeItem then passes item data down based on that activeItem

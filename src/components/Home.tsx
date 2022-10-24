@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import Earth from '../assets/earth.png';
 import Moon from '../assets/moon.png';
@@ -6,20 +6,28 @@ import Nasa from '../assets/nasa.png';
 
 interface IHome {
 	// Year range used in the search query (e.g: 1960, 2020)
-	handleTimeChange: (start: number, end: number) => void;
+	handleStartChange: (start: string) => void;
+	handleEndChange: (end: string) => void;
 
 	// NASA center used in the search query
-	// handleCenterChange: (center: string) => void;
-
-	// // Number of keywords shown for each data item
-	// handleKeywordsChange: (keywords: number) => void;
+	handleCenterChange: (center: string) => void;
 }
 
 const Home: FC<IHome> = ({
-	handleTimeChange,
-	// handleCenterChange,
+	handleStartChange,
+	handleEndChange,
+	handleCenterChange,
 	// handleKeywordsChange,
 }) => {
+	const [start, setStart] = useState<string>('1958');
+	const [end, setEnd] = useState<string>('2023');
+	const [center, setCenter] = useState<string>('ARC');
+
+	useEffect(() => {
+		handleStartChange(start);
+		handleEndChange(end);
+	}, [start, end]);
+
 	return (
 		<div
 			id="Home"
@@ -32,11 +40,17 @@ const Home: FC<IHome> = ({
 			<aside className="absolute left-[5%] top-32 w-[320px]  ">
 				<p className="mb-1">Years</p>
 				{/* TO DO: Implement state logic, state-prop passing, and app query manipulation for year start/end inputs */}
+				{/* Debounce the year input, then when debounced finishes AND IF year string length is 4, handler passes up */}
 				<div className="flex">
 					<input
 						type="number"
 						name="search"
 						placeholder="1958"
+						onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+							if (e.target.value.length === 4) {
+								setStart(e.target.value);
+							}
+						}}
 						className="h-7 w-20 rounded-md bg-neutral-200 px-2 text-center text-lg text-black focus:animate-none focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
 					/>
 					<span className="mx-2 text-lg">to</span>
@@ -44,6 +58,11 @@ const Home: FC<IHome> = ({
 						type="number"
 						name="search"
 						placeholder="2023"
+						onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+							if (e.target.value.length === 4) {
+								setEnd(e.target.value);
+							}
+						}}
 						className="h-7 w-20 rounded-md bg-neutral-200 px-2 text-center text-lg text-black focus:animate-none focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
 					/>
 				</div>
@@ -52,34 +71,154 @@ const Home: FC<IHome> = ({
 				{/* TO DO: Implement state logic, state-prop passing, and app query manipulation for each button with conditional styles based on center chosen */}
 				<div className="grid grid-cols-5 gap-1">
 					<div className="nasa-center-container">
-						<button className="nasa-center-button">ARC</button>
+						<button
+							onClick={() => {
+								handleCenterChange('ARC');
+								setCenter('ARC');
+							}}
+							className={
+								center === 'ARC'
+									? `nasa-center-button-active`
+									: `nasa-center-button`
+							}
+						>
+							ARC
+						</button>
 					</div>
 					<div className="nasa-center-container">
-						<button className="nasa-center-button">AFRC</button>
+						<button
+							onClick={() => {
+								handleCenterChange('AFRC');
+								setCenter('AFRC');
+							}}
+							className={
+								center === 'AFRC'
+									? `nasa-center-button-active`
+									: `nasa-center-button`
+							}
+						>
+							AFRC
+						</button>
 					</div>
 					<div className="flex text-lg">
-						<button className="nasa-center-button">GRC</button>
+						<button
+							onClick={() => {
+								handleCenterChange('GRC');
+								setCenter('GRC');
+							}}
+							className={
+								center === 'GRC'
+									? `nasa-center-button-active`
+									: `nasa-center-button`
+							}
+						>
+							GRC
+						</button>
 					</div>
 					<div className="nasa-center-container">
-						<button className="nasa-center-button">GSFC</button>
+						<button
+							onClick={() => {
+								handleCenterChange('GSFC');
+								setCenter('GSFC');
+							}}
+							className={
+								center === 'GSFC'
+									? `nasa-center-button-active`
+									: `nasa-center-button`
+							}
+						>
+							GSFC
+						</button>
 					</div>
 					<div className="nasa-center-container">
-						<button className="nasa-center-button">JPL</button>
+						<button
+							onClick={() => {
+								handleCenterChange('JPL');
+								setCenter('JPL');
+							}}
+							className={
+								center === 'JPL'
+									? `nasa-center-button-active`
+									: `nasa-center-button`
+							}
+						>
+							JPL
+						</button>
 					</div>
 					<div className="nasa-center-container">
-						<button className="nasa-center-button">JSC</button>
+						<button
+							onClick={() => {
+								handleCenterChange('JSC');
+								setCenter('JSC');
+							}}
+							className={
+								center === 'JSC'
+									? `nasa-center-button-active`
+									: `nasa-center-button`
+							}
+						>
+							JSC
+						</button>
 					</div>
 					<div className="nasa-center-container">
-						<button className="nasa-center-button">KSC</button>
+						<button
+							onClick={() => {
+								handleCenterChange('KSC');
+								setCenter('KSC');
+							}}
+							className={
+								center === 'KSC'
+									? `nasa-center-button-active`
+									: `nasa-center-button`
+							}
+						>
+							KSC
+						</button>
 					</div>
 					<div className="nasa-center-container">
-						<button className="nasa-center-button">LRC</button>
+						<button
+							onClick={() => {
+								handleCenterChange('LRC');
+								setCenter('LRC');
+							}}
+							className={
+								center === 'LRC'
+									? `nasa-center-button-active`
+									: `nasa-center-button`
+							}
+						>
+							LRC
+						</button>
 					</div>
 					<div className="nasa-center-container">
-						<button className="nasa-center-button">MSFC</button>
+						<button
+							onClick={() => {
+								handleCenterChange('MSFC');
+								setCenter('MSFC');
+							}}
+							className={
+								center === 'MSFC'
+									? `nasa-center-button-active`
+									: `nasa-center-button`
+							}
+						>
+							MSFC
+						</button>
 					</div>
 					<div className="nasa-center-container">
-						<button className="nasa-center-button">MAF</button>
+						<button
+							onClick={() => {
+								handleCenterChange('MAF');
+								setCenter('MAF');
+							}}
+							className={
+								center === 'MAF'
+									? `nasa-center-button-active`
+									: `nasa-center-button`
+							}
+						>
+							MAF
+						</button>
 					</div>
 					<p className="col-span-5 flex text-sm">
 						<span className="mx-1">*</span>Not choosing a center will show

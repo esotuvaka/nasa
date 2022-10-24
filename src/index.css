@@ -10,6 +10,10 @@
 	@apply flex h-8 w-[58px] items-center justify-center rounded-md bg-neutral-200 px-2 text-neutral-400;
 }
 
+.nasa-center-button-active {
+	@apply flex h-8 w-[58px] items-center justify-center rounded-md bg-neutral-200 px-2 text-black ring-4 ring-red-500;
+}
+
 .planets-container {
 	width: 150px;
 	height: 150px;

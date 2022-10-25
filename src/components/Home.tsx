@@ -17,7 +17,6 @@ const Home: FC<IHome> = ({
 	handleStartChange,
 	handleEndChange,
 	handleCenterChange,
-	// handleKeywordsChange,
 }) => {
 	const [start, setStart] = useState<string>('1958');
 	const [end, setEnd] = useState<string>('2023');
@@ -39,8 +38,6 @@ const Home: FC<IHome> = ({
 			</div>
 			<aside className="absolute left-[5%] top-32 w-[320px]  ">
 				<p className="mb-1">Years</p>
-				{/* TO DO: Implement state logic, state-prop passing, and app query manipulation for year start/end inputs */}
-				{/* Debounce the year input, then when debounced finishes AND IF year string length is 4, handler passes up */}
 				<div className="flex">
 					<input
 						type="number"
@@ -66,9 +63,8 @@ const Home: FC<IHome> = ({
 						className="h-7 w-20 rounded-md bg-neutral-200 px-2 text-center text-lg text-black focus:animate-none focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
 					/>
 				</div>
-				<p className="mt-4 mb-1">Center *</p>
+				<p className="mt-4 mb-1">Center </p>
 
-				{/* TO DO: Implement state logic, state-prop passing, and app query manipulation for each button with conditional styles based on center chosen */}
 				<div className="grid grid-cols-5 gap-1">
 					<div className="nasa-center-container">
 						<button
@@ -220,10 +216,6 @@ const Home: FC<IHome> = ({
 							MAF
 						</button>
 					</div>
-					<p className="col-span-5 flex text-sm">
-						<span className="mx-1">*</span>Not choosing a center will show
-						results from the entire NASA API
-					</p>
 				</div>
 			</aside>
 			<div className="planets-container">

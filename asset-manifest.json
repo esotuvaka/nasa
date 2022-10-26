@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/nasa/static/css/main.c2d741a2.css",
+    "main.js": "/nasa/static/js/main.e141f53a.js",
+    "static/js/787.37980ae4.chunk.js": "/nasa/static/js/787.37980ae4.chunk.js",
+    "static/media/earth.png": "/nasa/static/media/earth.eaaff56653d975b24273.png",
+    "static/media/moon.png": "/nasa/static/media/moon.beec31bfd55538a28e93.png",
+    "static/media/nasa.png": "/nasa/static/media/nasa.307705b7384ac9666b20.png",
+    "index.html": "/nasa/index.html",
+    "main.c2d741a2.css.map": "/nasa/static/css/main.c2d741a2.css.map",
+    "main.e141f53a.js.map": "/nasa/static/js/main.e141f53a.js.map",
+    "787.37980ae4.chunk.js.map": "/nasa/static/js/787.37980ae4.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c2d741a2.css",
+    "static/js/main.e141f53a.js"
+  ]
+}

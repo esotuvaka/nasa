@@ -93,6 +93,8 @@ function App() {
 		setCenter(center);
 	};
 
+	// TO DO: Make app responsive on mobile, in ALL components
+
 	return (
 		<div className="min-h-[100vh] overflow-x-hidden bg-black">
 			<Header changeSearch={(data) => setSearchInput(data)} />
